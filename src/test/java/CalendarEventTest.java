@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ class CalendarEventTest {
 	PriorityEvent C;
 	WeeklyEvent D;
 	OneTimeEvent E;
+	OneTimeEvent F;
 	
 	GregorianCalendar startA;
 	GregorianCalendar endA;
@@ -26,10 +28,12 @@ class CalendarEventTest {
 	GregorianCalendar startAB;
 	GregorianCalendar endAB;
 	GregorianCalendar endBC;
+	GregorianCalendar startF;
+	GregorianCalendar endF;
+	GregorianCalendar endDE;
 	
-	int[] weekDays = {2,4,6};
+	int[] weekDays = {Calendar.MONDAY, Calendar.WEDNESDAY};
 	
-	MeetingCalendar cal;
 
 	Meeting AM;
 	Meeting BM;
@@ -45,16 +49,19 @@ class CalendarEventTest {
 		endB = new GregorianCalendar(2024, 9, 13, 7, 59);
 		startC = new GregorianCalendar(2025, 1, 1, 9, 10);
 		endC = new GregorianCalendar(2025, 1, 1, 9, 15);
-		startD = new GregorianCalendar(2100, 12, 30, 9, 00);
-		endD = new GregorianCalendar(2100, 12, 30, 9, 01);
+		startD = new GregorianCalendar(2024, 9, 15, 7, 00);
+		endDE = new GregorianCalendar(2024, 9, 15, 7, 59);
+		endD = new GregorianCalendar(2024, 9, 20, 9, 01);
+		startF = new GregorianCalendar(2024, 9, 18, 12, 00);
+		endF = new GregorianCalendar(2024, 9, 18, 13, 00);
 		
 		A = new OneTimeEvent("A", "LocationA", startA, endA);
 		B = new MultiDayPerWeekEvent("B", "LocationB", startB, endB, endD, weekDays);
 		C = new PriorityEvent("C", "LocationC", startC, endC);
 		D = new WeeklyEvent("D", "LocationD", startA, endA, endD);
 		E = new OneTimeEvent("E", "LocationE", startC, endC);
+		F = new OneTimeEvent("F", "LocationF", startF, endF);
 		
-		cal = new MeetingCalendar();
 		
 		startAB = new GregorianCalendar(2023,8,28,9,00);
 		endAB = new GregorianCalendar(2023,8,28,10,00);
@@ -109,27 +116,62 @@ class CalendarEventTest {
 	
 	@Test
 	public void testOneTimeScheduleEvent() {
+		MeetingCalendar cal = new MeetingCalendar();
 		A = new OneTimeEvent("A", "Location A", startA, endA);
-		A.scheduleEvent(cal);
-		
-		Meeting Alien = new Meeting("Alien", "LocationAlien", startA, endA);
-		assertEquals(A.getDescription(), cal.findMeeting(endA).getDescription());
-		
-		
+		A.scheduleEvent(cal);		
+		assertEquals(A.getDescription(), cal.findMeeting(startA).getDescription());
+		E = new OneTimeEvent("E", "LocationE", startA, endA);
+		E.scheduleEvent(cal);
+		assertEquals(A.getDescription(), cal.findMeeting(startA).getDescription());
 	}
 	
 	@Test
 	public void testPriorityScheduleEvent() {
-		
+		MeetingCalendar cal2 = new MeetingCalendar();
+		A = new OneTimeEvent("A", "Location A", startA, endA);
+		A.scheduleEvent(cal2);
+		assertEquals(A.getDescription(), cal2.findMeeting(startA).getDescription());
+		C = new PriorityEvent("C", "LocationC", startA, endA);
+		C.scheduleEvent(cal2);
+		assertEquals(C.getDescription(), cal2.findMeeting(startA).getDescription());
 	}
 	
 	@Test
 	public void testWeeklyEventSchedule() {
-		//D.scheduleEvent(cal);
+		MeetingCalendar cal3 = new MeetingCalendar();
+		MeetingCalendar cal5 = new MeetingCalendar();
+		GregorianCalendar weekLater = new GregorianCalendar(2024, 9, 18, 12, 00);
+		GregorianCalendar twoWeekLater = new GregorianCalendar(2024, 9, 25, 12, 00);
+		D = new WeeklyEvent("D", "LocationD", startA, endA, endD);
+		D.scheduleEvent(cal3);
+		assertEquals(D.getDescription(), cal3.findMeeting(startA).getDescription());
+		assertEquals(D.getDescription(), cal3.findMeeting(weekLater).getDescription());
+		assertNull(cal3.findMeeting(twoWeekLater));
+		A = new OneTimeEvent("A", "LocationA", startA, endA);
+		A.scheduleEvent(cal5);
+		D.scheduleEvent(cal5);
+		assertEquals(A.getDescription(), cal5.findMeeting(startA).getDescription());
 		
 	}
 	@Test
 	public void testMultiDayPerWeekScheduleEvent() {
+		MeetingCalendar cal4 = new MeetingCalendar();
+		MeetingCalendar cal6 = new MeetingCalendar();
+		B = new MultiDayPerWeekEvent("B", "LocationB", startB, endB, endD, weekDays);
+		GregorianCalendar firstDay = new GregorianCalendar(2024, 9, 14, 7, 00);
+		GregorianCalendar firstDayEnd = new GregorianCalendar(2024, 9, 14, 7, 30);
+		GregorianCalendar secondDay = new GregorianCalendar(2024, 9, 16, 7, 00);
+		GregorianCalendar thirdDay = new GregorianCalendar(2024, 9, 17, 7, 00);
+		GregorianCalendar fourthDay = new GregorianCalendar(2024, 9, 21, 7, 00);
+		B.scheduleEvent(cal4);
+		assertEquals(B.getDescription(), cal4.findMeeting(firstDay).getDescription());
+		assertEquals(B.getDescription(), cal4.findMeeting(secondDay).getDescription());
+		assertNull(cal4.findMeeting(thirdDay));
+		assertNull(cal4.findMeeting(fourthDay));
+		A = new OneTimeEvent("A", "LocationA", firstDay, firstDayEnd);
+		A.scheduleEvent(cal6);
+		B.scheduleEvent(cal6);
+		assertEquals(A.getDescription(), cal6.findMeeting(firstDay).getDescription());
 		
 	}
 
