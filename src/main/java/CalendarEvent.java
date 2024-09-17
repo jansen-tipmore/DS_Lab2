@@ -61,12 +61,12 @@ public abstract class CalendarEvent {
 	 * @param location
 	 * @param description
 	 */
-	public CalendarEvent(GregorianCalendar endTime, GregorianCalendar startTime, String location, String description) {
+	public CalendarEvent(String description, String location, GregorianCalendar startTime, GregorianCalendar endTime) {
 		super();
-		this.endTime = endTime;
-		this.startTime = startTime;
-		this.location = location;
 		this.description = description;
+		this.location = location;
+		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 	public abstract void scheduleEvent(MeetingCalendar cal);
 

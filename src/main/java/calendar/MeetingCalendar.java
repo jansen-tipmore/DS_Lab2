@@ -115,7 +115,7 @@ public class MeetingCalendar
 	 * Removes the meeting m.  If m is not present this method will do nothing.
 	 * @param m
 	 */
-	public void removeMeeting(Meeting m)
+	public void removeMeeting(Meeting m)	//fail("Not yet implemented");
 	{
 		meetings.remove(m);
 	}

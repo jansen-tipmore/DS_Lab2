@@ -4,8 +4,8 @@ import calendar.MeetingCalendar;
 
 public class OneTimeEvent extends CalendarEvent {
 
-	public OneTimeEvent(GregorianCalendar endTime, GregorianCalendar startTime, String location, String description) {
-		super(endTime, startTime, location, description);
+	public OneTimeEvent(String description, String location, GregorianCalendar startTime, GregorianCalendar endTime) {
+		super(description, location, startTime, endTime);
 		// TODO Auto-generated constructor stub
 	}
 public void scheduleEvent(MeetingCalendar cal) {

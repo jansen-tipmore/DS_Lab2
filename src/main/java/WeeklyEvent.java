@@ -12,9 +12,9 @@ public class WeeklyEvent extends CalendarEvent {
 	 * @param description
 	 * @param repeatUntil
 	 */
-	public WeeklyEvent(GregorianCalendar endTime, GregorianCalendar startTime, String location, String description,
+	public WeeklyEvent(String description, String location, GregorianCalendar startTime, GregorianCalendar endTime,
 			GregorianCalendar repeatUntil) {
-		super(endTime, startTime, location, description);
+		super(description, location, startTime, endTime);
 		this.setRepeatUntil(repeatUntil);
 	}
 

@@ -4,7 +4,7 @@ import calendar.MeetingCalendar;
 
 public class MultiDayPerWeekEvent extends CalendarEvent {
 	private GregorianCalendar repeatUntil;
-	private int days;
+	private int[] days;
 	/**
 	 * @param endTime
 	 * @param startTime
@@ -13,9 +13,8 @@ public class MultiDayPerWeekEvent extends CalendarEvent {
 	 * @param repeatUntil
 	 * @param days
 	 */
-	public MultiDayPerWeekEvent(GregorianCalendar endTime, GregorianCalendar startTime, String location,
-			String description, GregorianCalendar repeatUntil, int days) {
-		super(endTime, startTime, location, description);
+	public MultiDayPerWeekEvent(String description, String location, GregorianCalendar startTime, GregorianCalendar endTime, GregorianCalendar repeatUntil, int[] days) {
+		super(description, location, startTime, endTime);
 		this.setRepeatUntil(repeatUntil);
 		this.setDays(days);
 	}
@@ -25,10 +24,10 @@ public class MultiDayPerWeekEvent extends CalendarEvent {
 	public void setRepeatUntil(GregorianCalendar repeatUntil) {
 		this.repeatUntil = repeatUntil;
 	}
-	public int getDays() {
+	public int[] getDays() {
 		return days;
 	}
-	public void setDays(int days) {
+	public void setDays(int[] days) {
 		this.days = days;
 	}
 	public void scheduleEvent(MeetingCalendar cal) {
