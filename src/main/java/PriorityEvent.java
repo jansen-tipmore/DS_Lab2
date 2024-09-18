@@ -1,5 +1,6 @@
 import java.util.GregorianCalendar;
 
+import calendar.Meeting;
 import calendar.MeetingCalendar;
 
 public class PriorityEvent extends CalendarEvent {
@@ -11,6 +12,8 @@ public class PriorityEvent extends CalendarEvent {
 	}
 
 	public void scheduleEvent(MeetingCalendar cal) {
+		Meeting M = new Meeting(getDescription(), getLocation(), getStartTime(), getEndTime());
+		cal.addMeeting(M, true);
 		
 	}
 }

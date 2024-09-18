@@ -1,5 +1,4 @@
 import java.util.GregorianCalendar;
-
 import calendar.MeetingCalendar;
 
 public abstract class CalendarEvent {
